@@ -32,6 +32,16 @@ namespace GameServer
                 }
             }
         }
+        
+        public static void PlayerDisconnected(int _playerId)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.playerDisconnected))
+            {
+                _packet.Write(_playerId);
+
+                SendTCPDataToAll(_packet);
+            }
+        }
 
         public static void Welcome(int _toClient, string _msg)
         {
