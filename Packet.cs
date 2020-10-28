@@ -8,7 +8,8 @@ namespace GameServer
     public enum ServerPackets
     {
         welcome = 1,
-        bye = 2
+        bye,
+        playerDisconnected
     }
 
     /// <summary>Sent from client to server.</summary>
