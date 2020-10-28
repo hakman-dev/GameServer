@@ -25,6 +25,7 @@ namespace GameServer
             _packet.WriteLength();
             for (int i = 1; i <= Server.MaxPlayers; i++)
             {
+                Console.WriteLine("Sending to :" + i);
                 if (i != _exceptClient)
                 {
                     Server.clients[i].tcp.SendData(_packet);
@@ -38,8 +39,7 @@ namespace GameServer
             {
                 _packet.Write(_msg);
                 _packet.Write(_toClient);
-
-                SendTCPData(_toClient, _packet);
+                SendTCPDataToAll(_packet);
             }
         }
     }
