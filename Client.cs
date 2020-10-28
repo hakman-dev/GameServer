@@ -219,11 +219,12 @@ namespace GameServer
         private void Disconnect()
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
-
             // player = null;
 
             tcp.Disconnect();
             udp.Disconnect();
+            ServerSend.Bye(id, "Bye user! Current players:" + Server.CurrentPlayers);
+
         }
     }
 }

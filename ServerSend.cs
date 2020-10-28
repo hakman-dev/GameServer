@@ -42,5 +42,15 @@ namespace GameServer
                 SendTCPDataToAll(_packet);
             }
         }
+        
+        public static void Bye(int _toClient, string _msg)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.bye))
+            {
+                _packet.Write(_msg);
+                _packet.Write(_toClient);
+                SendTCPDataToAll(_packet);
+            }
+        }
     }
 }
