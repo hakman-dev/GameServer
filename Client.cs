@@ -50,8 +50,8 @@ namespace GameServer
                 receiveBuffer = new byte[dataBufferSize];
 
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-                
-                ServerSend.Welcome(id, "Welcome to the server!");
+
+                ServerSend.Welcome(id, "Welcome to the server! Current players:" + Server.CurrentPlayers);
             }
 
             public void SendData(Packet _packet)
@@ -219,13 +219,11 @@ namespace GameServer
         private void Disconnect()
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
+
             // player = null;
-            // ServerSend.Bye("Bye user! Current players:" + CurrentPlayers);
 
             tcp.Disconnect();
             udp.Disconnect();
-
-            ServerSend.PlayerDisconnected(id);
         }
     }
 }
