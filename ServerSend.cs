@@ -4,8 +4,9 @@ using System.Text;
 
 namespace GameServer
 {
-    class ServerSend
-    {
+    class ServerSend {
+        private static int playerCount = 0;
+        
         private static void SendTCPData(int _toClient, Packet _packet)
         {
             _packet.WriteLength();
@@ -32,15 +33,18 @@ namespace GameServer
                 }
             }
         }
-        
-        public static void PlayerDisconnected(int _playerId)
-        {
-            using (Packet _packet = new Packet((int)ServerPackets.playerDisconnected))
-            {
-                _packet.Write(_playerId);
 
-                SendTCPDataToAll(_packet);
-            }
+        public static void PlayerConnected() {
+            // handle counter
+            playerCount += 1;
+            PlayerCountUpdate(playerCount.ToString());
+        }
+        
+        public static void PlayerDisconnected()
+        {
+            // handle counter
+            playerCount -= 1;
+            PlayerCountUpdate(playerCount.ToString());
         }
 
         public static void Welcome(int _toClient, string _msg)

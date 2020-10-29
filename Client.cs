@@ -221,7 +221,8 @@ namespace GameServer
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
 
             // player = null;
-            ServerSend.PlayerCountUpdate("200");
+            ServerSend.PlayerDisconnected();
+            // ServerSend.PlayerCountUpdate("200");
             tcp.Disconnect();
             udp.Disconnect();
         }
