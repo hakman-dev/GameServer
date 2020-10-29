@@ -53,9 +53,9 @@ namespace GameServer
             }
         }
         
-        public static void PlayerUpdate(string _msg)
+        public static void PlayerCountUpdate(string _msg)
         {
-            using (Packet _packet = new Packet((int)ServerPackets.playerUpdate))
+            using (Packet _packet = new Packet((int)ServerPackets.PlayerCountUpdate))
             {
                 _packet.Write(_msg);
                 SendTCPDataToAll(_packet);
