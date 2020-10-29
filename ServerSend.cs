@@ -49,7 +49,7 @@ namespace GameServer
             {
                 _packet.Write(_msg);
                 _packet.Write(_toClient);
-                SendTCPDataToAll(_packet);
+                SendTCPData(_toClient, _packet);
             }
         }
         

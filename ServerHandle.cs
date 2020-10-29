@@ -13,7 +13,7 @@ namespace GameServer
 
             Console.WriteLine($"{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully. Total players {_clientIdCheck}.");
             // ServerSend.PlayerUpdate("" + _clientIdCheck);
-            Server.CurrentPlayers = _fromClient;
+            // Server.CurrentPlayers = _fromClient;
             if (_fromClient != _clientIdCheck)
             {
                 Console.WriteLine($"Player \"{_username}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
