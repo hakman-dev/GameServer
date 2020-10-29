@@ -51,7 +51,7 @@ namespace GameServer
 
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
-                ServerSend.Welcome(id, "Welcome to the server! Current players:" + Server.CurrentPlayers);
+                ServerSend.Welcome(id, "Welcome to the server!");
             }
 
             public void SendData(Packet _packet)

@@ -12,12 +12,13 @@ namespace GameServer
             string _username = _packet.ReadString();
 
             Console.WriteLine($"{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully. Total players {_clientIdCheck}.");
+            ServerSend.PlayerUpdate("Msg From Server: Players:" + _clientIdCheck);
             Server.CurrentPlayers = _fromClient;
             if (_fromClient != _clientIdCheck)
             {
                 Console.WriteLine($"Player \"{_username}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
             }
-            // TODO: send player into game
+            // TODO: send player into game 213.202.238.136
         }
     }
 }

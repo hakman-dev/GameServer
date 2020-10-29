@@ -52,5 +52,14 @@ namespace GameServer
                 SendTCPDataToAll(_packet);
             }
         }
+        
+        public static void PlayerUpdate(string _msg)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.playerUpdate))
+            {
+                _packet.Write(_msg);
+                SendTCPDataToAll(_packet);
+            }
+        }
     }
 }
