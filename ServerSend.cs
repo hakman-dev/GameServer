@@ -59,6 +59,7 @@ namespace GameServer
         
         public static void PlayerCountUpdate(string _msg)
         {
+            Console.WriteLine("Players:" + _msg);
             using (Packet _packet = new Packet((int)ServerPackets.PlayerCountUpdate))
             {
                 _packet.Write(_msg);
