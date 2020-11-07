@@ -58,7 +58,7 @@ namespace GameServer {
                         stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null);
                     }
                 } catch (Exception _ex) {
-                    Console.WriteLine($"Error sending data to player {id} via TCP: {_ex}");
+                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Error sending data to player {id} via TCP: {_ex}");
                 }
             }
 
@@ -76,7 +76,7 @@ namespace GameServer {
                     receivedData.Reset(HandleData(_data));
                     stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
                 } catch (Exception _ex) {
-                    Console.WriteLine($"Error receiving TCP data: {_ex}");
+                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Error receiving TCP data: {_ex}");
                     Server.clients[id].Disconnect();
                 }
             }
@@ -186,41 +186,24 @@ namespace GameServer {
         }
 
         private void Disconnect() {
-            Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}]{tcp.socket.Client.RemoteEndPoint} has disconnected.");
             Server._clientsConnected -= 1;
-            
-            
-            // List<string> clientIDs = new List<string>();
-            String clientIDs = "";
-
-            if (Server._clientsConnected < 5) {
-                // String[] clientIDs = new string[Server._clientsConnected];
-                // get all clients that are connected
-                for (int i = 1; i <= Server.MaxPlayers; i++) {
-                    
-                    // Console.WriteLine(Server.clients);
-                    // Console.WriteLine(Server.clients[i].tcp);
-                    Console.WriteLine(Server.clients[i].tcp.socket);
-                    if (Server.clients[i].tcp.socket.Connected) {
-                        clientIDs = clientIDs + "," + Server.clients[i].userid;
-                        // clientIDs.Add(Server.clients[i].userid);
-                    }
-                }
-
-                //output array to console
-                Console.WriteLine($"Current in game USER IDs: {clientIDs}");
-            }
-
-            // String[] clientIDArray = clientIDs.ToArray();
-            
-            
-            
-            
-            // player = null;
-            ServerSend.PlayerDisconnected();
-            // ServerSend.PlayerCountUpdate("200");
             tcp.Disconnect();
             udp.Disconnect();
+            
+            
+             
+            String clientIDs = "";
+            if (Server._clientsConnected < 5) {
+                // get all clients that are connected
+                for (int i = 1; i <= Server.MaxPlayers; i++) {
+                    if (Server.clients[i].tcp.socket.Connected) {
+                        clientIDs = clientIDs + "," + Server.clients[i].userid;
+                    }
+                }
+                //output array to console
+                Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Current in game USER IDs: {clientIDs}");
+            }
         }
     }
 }

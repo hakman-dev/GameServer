@@ -34,14 +34,14 @@ namespace GameServer
             udpListener = new UdpClient(Port);
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
-            Console.WriteLine($"Server started on port {Port}.");
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Server started on port {Port}.");
         }
 
         private static void TCPConnectCallback(IAsyncResult _result)
         {
             TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
-            Console.WriteLine($"Incoming connection from {_client.Client.RemoteEndPoint}...");
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Incoming connection from {_client.Client.RemoteEndPoint}...");
 
             for (int i = 1; i <= MaxPlayers; i++)
             {
@@ -52,7 +52,7 @@ namespace GameServer
                 }
             }
 
-            Console.WriteLine($"{_client.Client.RemoteEndPoint} failed to connect: Server full!");
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}]{_client.Client.RemoteEndPoint} failed to connect: Server full!");
         }
 
         private static void UDPReceiveCallback(IAsyncResult _result)
@@ -91,7 +91,7 @@ namespace GameServer
             }
             catch (Exception _ex)
             {
-                Console.WriteLine($"Error receiving UDP data: {_ex}");
+                Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Error receiving UDP data: {_ex}");
             }
         }
 
@@ -106,7 +106,7 @@ namespace GameServer
             }
             catch (Exception _ex)
             {
-                Console.WriteLine($"Error sending data to {_clientEndPoint} via UDP: {_ex}");
+                Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Error sending data to {_clientEndPoint} via UDP: {_ex}");
             }
         }
 

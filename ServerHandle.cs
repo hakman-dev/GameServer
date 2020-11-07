@@ -11,8 +11,8 @@ namespace GameServer
             int _clientIdCheck = _packet.ReadInt();
             string _packetData = _packet.ReadString();
             Server._clientsConnected += 1;
-            Console.WriteLine($"{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully as player ID {_clientIdCheck}.");
-            Console.WriteLine($"{_packetData}");
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}]{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully as player ID {_clientIdCheck}.");
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}]{_packetData}");
             
             // using the method 
             char[] seperator = {':'};
@@ -27,7 +27,7 @@ namespace GameServer
             // Server.CurrentPlayers = _fromClient;
             // if (_fromClient != _clientIdCheck)
             // {
-            //     Console.WriteLine($"Player \"{_packetData}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
+            //     Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Player \"{_packetData}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
             // }
             // TODO: send player into game 213.202.238.136
         }
