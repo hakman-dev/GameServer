@@ -13,12 +13,13 @@ namespace GameServer
             Server._clientsConnected += 1;
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}]{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully as player ID {_clientIdCheck}.");
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}]{_packetData}");
-            
+            ServerSend.PlayerCountUpdate(Server._clientsConnected.ToString());
+
             // using the method 
             char[] seperator = {':'};
             String[] packetData = _packetData.Split(seperator);
             if (packetData[0] == "userid") {
-                Console.WriteLine("Recieving userid:" + packetData[1]);
+                Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Recieving userid:" + packetData[1]);
                 Server.clients[_fromClient].userid = packetData[1];
             }
             
