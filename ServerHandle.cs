@@ -12,6 +12,7 @@ namespace GameServer
             string _username = _packet.ReadString();
 
             Console.WriteLine($"{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully as player ID {_clientIdCheck}.");
+            Console.WriteLine($"{_username}");
             ServerSend.PlayerConnected();
             // ServerSend.PlayerCountUpdate("500");
             // Server.CurrentPlayers = _fromClient;
