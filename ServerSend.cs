@@ -59,10 +59,10 @@ namespace GameServer
         
         public static void PlayerCountUpdate(string _msg)
         {
-            Console.WriteLine("Players:" + Server.clientsConnected);
+            Console.WriteLine("Players:" + Server._clientsConnected);
             using (Packet _packet = new Packet((int)ServerPackets.PlayerCountUpdate))
             {
-                _packet.Write("" + Server.clientsConnected);
+                _packet.Write("" + Server._clientsConnected);
                 SendTCPDataToAll(_packet);
             }
         }

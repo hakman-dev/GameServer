@@ -9,7 +9,7 @@ namespace GameServer
     class Server
     {
         public static int MaxPlayers { get; private set; }
-        public static int clientsConnected { get; set; }
+        public static int _clientsConnected { get; set; }
         public static int Port { get; private set; }
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
         public delegate void PacketHandler(int _fromClient, Packet _packet);
@@ -21,7 +21,7 @@ namespace GameServer
         public static void Start(int _maxPlayers, int _port)
         {
             MaxPlayers = _maxPlayers;
-            clientsConnected = 0;
+            _clientsConnected = 0;
             Port = _port;
 
             Console.WriteLine("Starting server...");

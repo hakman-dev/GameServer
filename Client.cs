@@ -4,28 +4,27 @@ using System.Diagnostics;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+
 // using System.Numerics;
 
-namespace GameServer
-{
-    class Client
-    {
+namespace GameServer {
+    class Client {
         public static int dataBufferSize = 4096;
 
         public int id;
+
         // public Player player;
         public TCP tcp;
         public UDP udp;
+        public string userid;
 
-        public Client(int _clientId)
-        {
+        public Client(int _clientId) {
             id = _clientId;
             tcp = new TCP(id);
             udp = new UDP(id);
         }
 
-        public class TCP
-        {
+        public class TCP {
             public TcpClient socket;
 
             private readonly int id;
@@ -33,13 +32,12 @@ namespace GameServer
             private Packet receivedData;
             private byte[] receiveBuffer;
 
-            public TCP(int _id)
-            {
+
+            public TCP(int _id) {
                 id = _id;
             }
 
-            public void Connect(TcpClient _socket)
-            {
+            public void Connect(TcpClient _socket) {
                 socket = _socket;
                 socket.ReceiveBufferSize = dataBufferSize;
                 socket.SendBufferSize = dataBufferSize;
@@ -54,28 +52,20 @@ namespace GameServer
                 ServerSend.Welcome(id, "Welcome to the server!");
             }
 
-            public void SendData(Packet _packet)
-            {
-                try
-                {
-                    if (socket != null)
-                    {
+            public void SendData(Packet _packet) {
+                try {
+                    if (socket != null) {
                         stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null);
                     }
-                }
-                catch (Exception _ex)
-                {
+                } catch (Exception _ex) {
                     Console.WriteLine($"Error sending data to player {id} via TCP: {_ex}");
                 }
             }
 
-            private void ReceiveCallback(IAsyncResult _result)
-            {
-                try
-                {
+            private void ReceiveCallback(IAsyncResult _result) {
+                try {
                     int _byteLength = stream.EndRead(_result);
-                    if (_byteLength <= 0)
-                    {
+                    if (_byteLength <= 0) {
                         Server.clients[id].Disconnect();
                         return;
                     }
@@ -85,62 +75,50 @@ namespace GameServer
 
                     receivedData.Reset(HandleData(_data));
                     stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-                }
-                catch (Exception _ex)
-                {
+                } catch (Exception _ex) {
                     Console.WriteLine($"Error receiving TCP data: {_ex}");
                     Server.clients[id].Disconnect();
                 }
             }
 
-            private bool HandleData(byte[] _data)
-            {
+            private bool HandleData(byte[] _data) {
                 int _packetLength = 0;
 
                 receivedData.SetBytes(_data);
 
-                if (receivedData.UnreadLength() >= 4)
-                {
+                if (receivedData.UnreadLength() >= 4) {
                     _packetLength = receivedData.ReadInt();
-                    if (_packetLength <= 0)
-                    {
+                    if (_packetLength <= 0) {
                         return true;
                     }
                 }
 
-                while (_packetLength > 0 && _packetLength <= receivedData.UnreadLength())
-                {
+                while (_packetLength > 0 && _packetLength <= receivedData.UnreadLength()) {
                     byte[] _packetBytes = receivedData.ReadBytes(_packetLength);
-                    ThreadManager.ExecuteOnMainThread(() =>
-                    {
-                        using (Packet _packet = new Packet(_packetBytes))
-                        {
+                    ThreadManager.ExecuteOnMainThread(() => {
+                        using (Packet _packet = new Packet(_packetBytes)) {
                             int _packetId = _packet.ReadInt();
                             Server.packetHandlers[_packetId](id, _packet);
                         }
                     });
 
                     _packetLength = 0;
-                    if (receivedData.UnreadLength() >= 4)
-                    {
+                    if (receivedData.UnreadLength() >= 4) {
                         _packetLength = receivedData.ReadInt();
-                        if (_packetLength <= 0)
-                        {
+                        if (_packetLength <= 0) {
                             return true;
                         }
                     }
                 }
 
-                if (_packetLength <= 1)
-                {
+                if (_packetLength <= 1) {
                     return true;
                 }
 
                 return false;
             }
 
-            public void Disconnect()
-            {
+            public void Disconnect() {
                 socket.Close();
                 stream = null;
                 receivedData = null;
@@ -149,50 +127,41 @@ namespace GameServer
             }
         }
 
-        public class UDP
-        {
+        public class UDP {
             public IPEndPoint endPoint;
 
             private int id;
 
-            public UDP(int _id)
-            {
+            public UDP(int _id) {
                 id = _id;
             }
 
-            public void Connect(IPEndPoint _endPoint)
-            {
+            public void Connect(IPEndPoint _endPoint) {
                 endPoint = _endPoint;
             }
 
-            public void SendData(Packet _packet)
-            {
+            public void SendData(Packet _packet) {
                 Server.SendUDPData(endPoint, _packet);
             }
 
-            public void HandleData(Packet _packetData)
-            {
+            public void HandleData(Packet _packetData) {
                 int _packetLength = _packetData.ReadInt();
                 byte[] _packetBytes = _packetData.ReadBytes(_packetLength);
 
-                ThreadManager.ExecuteOnMainThread(() =>
-                {
-                    using (Packet _packet = new Packet(_packetBytes))
-                    {
+                ThreadManager.ExecuteOnMainThread(() => {
+                    using (Packet _packet = new Packet(_packetBytes)) {
                         int _packetId = _packet.ReadInt();
                         Server.packetHandlers[_packetId](id, _packet);
                     }
                 });
             }
 
-            public void Disconnect()
-            {
+            public void Disconnect() {
                 endPoint = null;
             }
         }
 
-        public void SendIntoGame(string _playerName)
-        {
+        public void SendIntoGame(string _playerName) {
             // player = new Player(id, _playerName, new Vector3(0, 0, 0));
 
             // foreach (Client _client in Server.clients.Values)
@@ -216,11 +185,33 @@ namespace GameServer
             // }
         }
 
-        private void Disconnect()
-        {
+        private void Disconnect() {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
-            Server.clientsConnected -= 1;
+            Server._clientsConnected -= 1;
+            
+            
+            // List<string> clientIDs = new List<string>();
+            String clientIDs = "";
 
+            if (Server._clientsConnected < 5) {
+                // String[] clientIDs = new string[Server._clientsConnected];
+                // get all clients that are connected
+                for (int i = 1; i <= Server.MaxPlayers; i++) {
+                    if (Server.clients[i].tcp.socket.Connected) {
+                        clientIDs = clientIDs + "," + Server.clients[i].userid;
+                        // clientIDs.Add(Server.clients[i].userid);
+                    }
+                }
+
+                //output array to console
+                Console.WriteLine($"Current in game USER IDs: {clientIDs}");
+            }
+
+            // String[] clientIDArray = clientIDs.ToArray();
+            
+            
+            
+            
             // player = null;
             ServerSend.PlayerDisconnected();
             // ServerSend.PlayerCountUpdate("200");

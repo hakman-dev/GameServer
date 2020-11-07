@@ -10,7 +10,7 @@ namespace GameServer
         {
             int _clientIdCheck = _packet.ReadInt();
             string _packetData = _packet.ReadString();
-            Server.clientsConnected += 1;
+            Server._clientsConnected += 1;
             Console.WriteLine($"{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully as player ID {_clientIdCheck}.");
             Console.WriteLine($"{_packetData}");
             
@@ -19,6 +19,7 @@ namespace GameServer
             String[] packetData = _packetData.Split(seperator);
             if (packetData[0] == "userid") {
                 Console.WriteLine("Recieving userid:" + packetData[1]);
+                Server.clients[_fromClient].userid = packetData[1];
             }
             
             ServerSend.PlayerConnected();
