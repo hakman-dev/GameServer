@@ -14,7 +14,6 @@ namespace GameServer
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully as player ID {_clientIdCheck}.");
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {_packetData}");
             ServerSend.PlayerCountUpdate(Server._clientsConnected.ToString());
-            ServerSend.PlayerCountUpdate(Server._clientsConnected.ToString());
 
             // using the method 
             char[] seperator = {':'};
