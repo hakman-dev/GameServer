@@ -22,7 +22,6 @@ namespace GameServer
                 Server.clients[_fromClient].userid = packetData[1];
             }
             
-            ServerSend.PlayerConnected();
             // ServerSend.PlayerCountUpdate("500");
             // Server.CurrentPlayers = _fromClient;
             // if (_fromClient != _clientIdCheck)

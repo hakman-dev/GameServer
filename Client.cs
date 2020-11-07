@@ -191,8 +191,8 @@ namespace GameServer {
             tcp.Disconnect();
             udp.Disconnect();
             
-            
-             
+            ServerSend.PlayerCountUpdate(Server._clientsConnected.ToString());
+
             String clientIDs = "";
             if (Server._clientsConnected < 5) {
                 // get all clients that are connected

@@ -34,19 +34,6 @@ namespace GameServer
             }
         }
 
-        public static void PlayerConnected() {
-            // handle counter
-            playerCount += 1;
-            PlayerCountUpdate(playerCount.ToString());
-        }
-        
-        public static void PlayerDisconnected()
-        {
-            // handle counter
-            playerCount -= 1;
-            PlayerCountUpdate(playerCount.ToString());
-        }
-
         public static void Welcome(int _toClient, string _msg)
         {
             using (Packet _packet = new Packet((int)ServerPackets.welcome))
@@ -59,7 +46,7 @@ namespace GameServer
         
         public static void PlayerCountUpdate(string _msg)
         {
-            Console.WriteLine("Players:" + Server._clientsConnected);
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Players:" + Server._clientsConnected);
             using (Packet _packet = new Packet((int)ServerPackets.PlayerCountUpdate))
             {
                 _packet.Write("" + Server._clientsConnected);
