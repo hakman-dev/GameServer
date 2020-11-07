@@ -9,17 +9,25 @@ namespace GameServer
         public static void WelcomeReceived(int _fromClient, Packet _packet)
         {
             int _clientIdCheck = _packet.ReadInt();
-            string _username = _packet.ReadString();
-
+            string _packetData = _packet.ReadString();
+            Server.clientsConnected += 1;
             Console.WriteLine($"{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully as player ID {_clientIdCheck}.");
-            Console.WriteLine($"{_username}");
+            Console.WriteLine($"{_packetData}");
+            
+            // using the method 
+            char[] seperator = {':'};
+            String[] packetData = _packetData.Split(seperator);
+            if (packetData[0] == "userid") {
+                Console.WriteLine("Recieving userid:" + packetData[1]);
+            }
+            
             ServerSend.PlayerConnected();
             // ServerSend.PlayerCountUpdate("500");
             // Server.CurrentPlayers = _fromClient;
-            if (_fromClient != _clientIdCheck)
-            {
-                Console.WriteLine($"Player \"{_username}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
-            }
+            // if (_fromClient != _clientIdCheck)
+            // {
+            //     Console.WriteLine($"Player \"{_packetData}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
+            // }
             // TODO: send player into game 213.202.238.136
         }
     }

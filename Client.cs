@@ -219,6 +219,7 @@ namespace GameServer
         private void Disconnect()
         {
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
+            Server.clientsConnected -= 1;
 
             // player = null;
             ServerSend.PlayerDisconnected();
