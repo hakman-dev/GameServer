@@ -20,7 +20,7 @@ namespace GameServer
 
         private static void MainThread()
         {
-            Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Main thread started. Running at {Constants.TICKS_PER_SEC} ticks per second.");
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Main thread started. Running at {Constants.TICKS_PER_SEC} ticks per second.");
             DateTime _nextLoop = DateTime.Now;
 
             while (isRunning)

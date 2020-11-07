@@ -50,6 +50,7 @@ namespace GameServer {
                 stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
 
                 ServerSend.Welcome(id, "Welcome to the server!");
+                ServerSend.PriceUpdate(id, "10000"); // price pool of 100.00
             }
 
             public void SendData(Packet _packet) {
@@ -58,7 +59,7 @@ namespace GameServer {
                         stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null);
                     }
                 } catch (Exception _ex) {
-                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Error sending data to player {id} via TCP: {_ex}");
+                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Error sending data to player {id} via TCP: {_ex}");
                 }
             }
 
@@ -76,7 +77,7 @@ namespace GameServer {
                     receivedData.Reset(HandleData(_data));
                     stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
                 } catch (Exception _ex) {
-                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Error receiving TCP data: {_ex}");
+                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Error receiving TCP data: {_ex}");
                     Server.clients[id].Disconnect();
                 }
             }
@@ -186,7 +187,7 @@ namespace GameServer {
         }
 
         private void Disconnect() {
-            Console.WriteLine($"[{DateTime.Now.TimeOfDay}]{tcp.socket.Client.RemoteEndPoint} has disconnected.");
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {tcp.socket.Client.RemoteEndPoint} has disconnected.");
             Server._clientsConnected -= 1;
             tcp.Disconnect();
             udp.Disconnect();
@@ -203,7 +204,7 @@ namespace GameServer {
                     }
                 }
                 //output array to console
-                Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Current in game USER IDs: {clientIDs}");
+                Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Current in game USER IDs: {clientIDs}");
             }
         }
     }

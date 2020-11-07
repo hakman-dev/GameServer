@@ -9,7 +9,8 @@ namespace GameServer
     {
         welcome = 1,
         playerDisconnected,
-        PlayerCountUpdate
+        PlayerCountUpdate,
+        PriceUpdate
     }
 
     /// <summary>Sent from client to server.</summary>

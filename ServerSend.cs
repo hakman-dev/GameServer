@@ -46,11 +46,21 @@ namespace GameServer
         
         public static void PlayerCountUpdate(string _msg)
         {
-            Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Players:" + Server._clientsConnected);
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Players:" + Server._clientsConnected);
             using (Packet _packet = new Packet((int)ServerPackets.PlayerCountUpdate))
             {
                 _packet.Write("" + Server._clientsConnected);
                 SendTCPDataToAll(_packet);
+            }
+        }
+        
+        public static void PriceUpdate(int _toClient, string _msg)
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.PriceUpdate))
+            {
+                _packet.Write(_msg);
+                _packet.Write(_toClient);
+                SendTCPData(_toClient, _packet);
             }
         }
     }
