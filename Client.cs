@@ -197,9 +197,10 @@ namespace GameServer {
             if (Server._clientsConnected < 5) {
                 // get all clients that are connected
                 for (int i = 1; i <= Server.MaxPlayers; i++) {
-                    if (Server.clients[i].tcp.socket.Connected) {
-                        clientIDs = clientIDs + "," + Server.clients[i].userid;
-                    }
+                    Console.WriteLine(Server.clients[i].tcp.socket);
+                    // if (Server.clients[i].tcp.socket.Connected) {
+                        // clientIDs = clientIDs + "," + Server.clients[i].userid;
+                    // }
                 }
                 //output array to console
                 Console.WriteLine($"[{DateTime.Now.TimeOfDay}]Current in game USER IDs: {clientIDs}");
