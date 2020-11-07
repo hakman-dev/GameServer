@@ -197,10 +197,14 @@ namespace GameServer {
                 // String[] clientIDs = new string[Server._clientsConnected];
                 // get all clients that are connected
                 for (int i = 1; i <= Server.MaxPlayers; i++) {
-                    if (Server.clients[i].tcp.socket.Connected) {
+                    
+                    Console.WriteLine(Server.clients);
+                    Console.WriteLine(Server.clients[i].tcp);
+                    Console.WriteLine(Server.clients[i].tcp.socket);
+                    // if (Server.clients[i].tcp.socket.Connected) {
                         clientIDs = clientIDs + "," + Server.clients[i].userid;
                         // clientIDs.Add(Server.clients[i].userid);
-                    }
+                    // }
                 }
 
                 //output array to console
