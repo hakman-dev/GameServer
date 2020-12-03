@@ -18,6 +18,8 @@ namespace GameServer
     public enum ClientPackets
     {
         welcomeReceived = 1,
+        playerCountUpdateReceived,
+        priceUpdateReceived,
         pong
     }
 
