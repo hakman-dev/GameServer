@@ -40,7 +40,9 @@ namespace GameServer
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Server started on port {Port}.");
 
             Thread pingThread = new Thread(Ping);
-            pingThread.Start();
+            // pingThread.Start();
+            DBConnect db = new DBConnect();
+            db.Games();
         }
 
         public static void Ping()
