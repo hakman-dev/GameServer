@@ -44,6 +44,15 @@ namespace GameServer
             }
         }
         
+        public static void Ping()
+        {
+            using (Packet _packet = new Packet((int)ServerPackets.ping))
+            {
+                _packet.Write("ping");
+                SendTCPDataToAll(_packet);
+            }
+        }
+        
         public static void PlayerCountUpdate(string _msg)
         {
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Players:" + Server._clientsConnected);

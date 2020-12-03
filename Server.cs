@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace GameServer
 {
@@ -35,6 +38,14 @@ namespace GameServer
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Server started on port {Port}.");
+
+            Thread pingThread = new Thread(Ping);
+            pingThread.Start();
+        }
+
+        public static void Ping()
+        {
+            ServerSend.Ping();
         }
 
         private static void TCPConnectCallback(IAsyncResult _result)
@@ -42,6 +53,7 @@ namespace GameServer
             TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Incoming connection from {_client.Client.RemoteEndPoint}...");
+            _clientsConnected += 1;
 
             for (int i = 1; i <= MaxPlayers; i++)
             {
@@ -51,7 +63,7 @@ namespace GameServer
                     return;
                 }
             }
-
+            //TODO:: Disable new clients when game started
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {_client.Client.RemoteEndPoint} failed to connect: Server full!");
         }
 

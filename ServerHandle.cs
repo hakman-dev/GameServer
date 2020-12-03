@@ -10,7 +10,7 @@ namespace GameServer
         {
             int _clientIdCheck = _packet.ReadInt();
             string _packetData = _packet.ReadString();
-            Server._clientsConnected += 1;
+            // Server._clientsConnected += 1;
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully as player ID {_clientIdCheck}.");
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {_packetData}");
             ServerSend.PlayerCountUpdate(Server._clientsConnected.ToString());
