@@ -46,6 +46,7 @@ namespace GameServer
         
         public static void Ping()
         {
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Ping!");
             using (Packet _packet = new Packet((int)ServerPackets.ping))
             {
                 _packet.Write("ping");

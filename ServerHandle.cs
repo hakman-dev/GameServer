@@ -31,5 +31,12 @@ namespace GameServer
             // }
             // TODO: send player into game 213.202.238.136
         }
+
+        public static void Pong(int _fromClient, Packet _packet)
+        {
+            int _clientIdCheck = _packet.ReadInt();
+            string _packetData = _packet.ReadString();
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} Pong!");
+        }
     }
 }
