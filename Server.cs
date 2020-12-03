@@ -46,6 +46,7 @@ namespace GameServer
         public static void Ping()
         {
             ServerSend.Ping();
+            Thread.Sleep(2000); 
         }
 
         private static void TCPConnectCallback(IAsyncResult _result)
