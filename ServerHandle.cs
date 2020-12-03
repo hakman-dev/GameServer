@@ -34,8 +34,8 @@ namespace GameServer
 
         public static void Pong(int _fromClient, Packet _packet)
         {
-            int _clientIdCheck = _packet.ReadInt();
-            string _packetData = _packet.ReadString();
+            // int _clientIdCheck = _packet.ReadInt();
+            // string _packetData = _packet.ReadString();
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} Pong!");
         }
     }
