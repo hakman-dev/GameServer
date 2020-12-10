@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace GameServer
@@ -39,19 +40,28 @@ namespace GameServer
             _packetData = _packet.ReadString();
             char[] seperator = {':'};
             String[] packetData = _packetData.Split(seperator);
-            
-            if (packetData[0] == "pong") {
-                Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Recieving pingid:" + packetData[1]);
-                Server.clients[_fromClient].lastPingIDRecieved = Int32.Parse(packetData[1]);
-                
-                if (Server.clients[_fromClient].lastPingIDRecieved <= (ServerSend.pingID - 3)) // missed 3 pings.. disconnect!
+            try
+            {
+                if (packetData[0] == "pong")
                 {
-                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} was removed from game.");        
-                    Server.clients[_fromClient].tcp.Disconnect();
+                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Recieving pingid:" + packetData[1]);
+                    Server.clients[_fromClient].lastPingIDRecieved = Int32.Parse(packetData[1]);
+
+                    if (Server.clients[_fromClient].lastPingIDRecieved <= (ServerSend.pingID - 3)
+                    ) // missed 3 pings.. disconnect!
+                    {
+                        Console.WriteLine(
+                            $"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} was removed from game.");
+                        Server.clients[_fromClient].tcp.Disconnect();
+                    }
                 }
+                Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} Pong!");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Someone tried sending data while disconnected from our side");
             }
             
-            Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} Pong!");
         }
     }
 }
