@@ -37,8 +37,8 @@ namespace GameServer
 
         public static void Pong(int _fromClient, Packet _packet)
         {
-            // try
-            // {
+            try
+            {
                 _packetData = _packet.ReadString();
                 char[] seperator = {':'};
                 String[] packetData = _packetData.Split(seperator);
@@ -56,11 +56,11 @@ namespace GameServer
                     }
                 }
                 Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} Pong!");
-            // }
-            // catch (Exception e)
-            // {
-            //     Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Someone tried sending data while disconnected from our side");
-            // }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Someone tried sending data while disconnected from our side");
+            }
             
         }
     }
