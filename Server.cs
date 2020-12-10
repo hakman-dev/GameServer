@@ -41,8 +41,6 @@ namespace GameServer
 
             Thread pingThread = new Thread(Ping);
             // pingThread.Start();
-            DBConnect db = new DBConnect();
-            db.Games();
         }
 
         public static void Ping()
