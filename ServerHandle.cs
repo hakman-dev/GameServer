@@ -46,7 +46,7 @@ namespace GameServer
                 if (packetData[0] == "pong")
                 {
                     Server.clients[_fromClient].lastPingIDRecieved = Int32.Parse(packetData[1]);
-
+                    Console.WriteLine("Pong received");
                     if (Server.clients[_fromClient].lastPingIDRecieved <= (ServerSend.pingID - 3)
                     ) // missed 3 pings.. disconnect!
                     {
