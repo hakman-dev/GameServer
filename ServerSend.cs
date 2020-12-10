@@ -4,7 +4,9 @@ using System.Text;
 
 namespace GameServer
 {
-    class ServerSend {
+    class ServerSend
+    {
+        public static int pingID = 0;
         private static int playerCount = 0;
         
         private static void SendTCPData(int _toClient, Packet _packet)
@@ -46,12 +48,15 @@ namespace GameServer
         
         public static void Ping()
         {
-            Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Ping!");
+            Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Ping ID" + pingID);
+            
             using (Packet _packet = new Packet((int)ServerPackets.ping))
             {
-                _packet.Write("ping");
+                _packet.Write("ping" + pingID);
                 SendTCPDataToAll(_packet);
             }
+
+            pingID++;
         }
         
         public static void PlayerCountUpdate(string _msg)

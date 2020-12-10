@@ -6,10 +6,12 @@ namespace GameServer
 {
     class ServerHandle
     {
+        private static string _packetData;
+        
         public static void WelcomeReceived(int _fromClient, Packet _packet)
         {
             int _clientIdCheck = _packet.ReadInt();
-            string _packetData = _packet.ReadString();
+            _packetData = _packet.ReadString();
             // Server._clientsConnected += 1;
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully as player ID {_clientIdCheck}.");
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {_packetData}");
@@ -34,8 +36,21 @@ namespace GameServer
 
         public static void Pong(int _fromClient, Packet _packet)
         {
-            // int _clientIdCheck = _packet.ReadInt();
-            // string _packetData = _packet.ReadString();
+            _packetData = _packet.ReadString();
+            char[] seperator = {':'};
+            String[] packetData = _packetData.Split(seperator);
+            
+            if (packetData[0] == "pong") {
+                Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Recieving pingid:" + packetData[1]);
+                Server.clients[_fromClient].lastPingIDRecieved = Int32.Parse(packetData[1]);
+                
+                if (Server.clients[_fromClient].lastPingIDRecieved <= (ServerSend.pingID - 3)) // missed 3 pings.. disconnect!
+                {
+                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} was removed from game.");        
+                    Server.clients[_fromClient].tcp.Disconnect();
+                }
+            }
+            
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} Pong!");
         }
     }

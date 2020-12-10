@@ -20,9 +20,14 @@ namespace GameServer
 
         private static TcpListener tcpListener;
         private static UdpClient udpListener;
-
+        private static Int32 startTime;
+        private static Int32 currentTime;
+        private static bool shouldPing = true;
+        private static bool shouldStopPinging = false;
         public static void Start(int _maxPlayers, int _port)
         {
+            startTime = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
+
             MaxPlayers = _maxPlayers;
             _clientsConnected = 0;
             Port = _port;
@@ -38,15 +43,43 @@ namespace GameServer
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Server started on port {Port}.");
+            
 
             Thread pingThread = new Thread(Ping);
-            // pingThread.Start();
+            pingThread.Start();
         }
 
         public static void Ping()
         {
-            ServerSend.Ping();
-            Thread.Sleep(2000);
+
+            currentTime = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
+            Console.WriteLine((currentTime - startTime) % 300);
+            if (currentTime - startTime != 0)
+            {
+                if (shouldPing)
+                {
+                    if (((currentTime - startTime)) % 300 == 0)
+                    {
+                        shouldPing = false;
+                    }
+                }
+                else
+                {
+                    if (((currentTime - startTime) - 60) % 300 == 0)
+                    {
+                        shouldPing = true;
+                    }
+                }
+            }
+            
+            Console.WriteLine("Should ping? " + shouldPing);
+            if ((currentTime - startTime) % 5 == 0 && shouldPing)
+            {
+                Console.WriteLine("Pinging");
+                ServerSend.Ping();
+            }
+            
+            Thread.Sleep(990);
             Ping();
         }
 
