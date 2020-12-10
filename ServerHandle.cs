@@ -52,13 +52,16 @@ namespace GameServer
                     {
                         Console.WriteLine(
                             $"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} was removed from game.");
-                        if (Server.clients[_fromClient].tcp.socket != null)
+                        if (Server.clients[_fromClient].isConnected)
                         {
+                            Server.clients[_fromClient].isConnected = false;
                             Server.clients[_fromClient].tcp.Disconnect();
+                            return;
                         }
-                        // Server.clients[_fromClient].tcp.Disconnect();
                     }
                 }
+
+                Server.clients[_fromClient].isConnected = true;
                 Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} Pong!");
             }
             catch (Exception e)

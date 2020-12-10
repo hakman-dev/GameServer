@@ -18,6 +18,7 @@ namespace GameServer {
         public UDP udp;
         public string userid;
         public int lastPingIDRecieved;
+        public bool isConnected;
 
         public Client(int _clientId) {
             id = _clientId;
