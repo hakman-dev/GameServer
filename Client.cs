@@ -121,7 +121,14 @@ namespace GameServer {
             }
 
             public void Disconnect() {
-                socket.Close();
+                try
+                {
+                    socket.Close();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Someone tried sending data while disconnected from our side");
+                }
                 stream = null;
                 receivedData = null;
                 receiveBuffer = null;
