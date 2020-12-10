@@ -53,7 +53,6 @@ namespace GameServer
         {
 
             currentTime = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
-            Console.WriteLine((currentTime - startTime) % 300);
             if (currentTime - startTime != 0)
             {
                 if (shouldPing)
@@ -72,10 +71,8 @@ namespace GameServer
                 }
             }
             
-            Console.WriteLine("Should ping? " + shouldPing);
             if ((currentTime - startTime) % 5 == 0 && shouldPing)
             {
-                Console.WriteLine("Pinging");
                 ServerSend.Ping();
             }
             
