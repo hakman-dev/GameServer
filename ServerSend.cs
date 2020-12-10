@@ -52,7 +52,7 @@ namespace GameServer
             
             using (Packet _packet = new Packet((int)ServerPackets.ping))
             {
-                _packet.Write("ping" + pingID);
+                _packet.Write("ping:" + pingID);
                 SendTCPDataToAll(_packet);
             }
 
