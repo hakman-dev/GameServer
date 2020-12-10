@@ -71,6 +71,7 @@ namespace GameServer {
                 try {
                     int _byteLength = stream.EndRead(_result);
                     if (_byteLength <= 0) {
+                        Console.WriteLine("Bytelength was 0");
                         Server.clients[id].Disconnect();
                         return;
                     }
