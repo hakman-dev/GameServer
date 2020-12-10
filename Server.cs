@@ -59,18 +59,18 @@ namespace GameServer
         public static void CheckConnections()
         {
             Thread.Sleep(15000);
-            for (int i = 0; i < clients.Count; i++)
+            for (int i = 1; i <= clients.Count; i++)
             {
-                if (clients[i].lastPingIDRecieved <= (ServerSend.pingID - 3) && clients[i].hasHadAConnection)
+                try
                 {
-                    try
+                    if (clients[i].lastPingIDRecieved <= (ServerSend.pingID - 3) && clients[i].hasHadAConnection)
                     {
                         clients[i].Disconnect();
                     }
-                    catch (Exception e)
-                    {
-                        // do nothing with it, YOLO
-                    }
+                }
+                catch (Exception e)
+                {
+                    // do nothing with it, YOLO
                 }
             }
 
