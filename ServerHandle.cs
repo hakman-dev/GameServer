@@ -37,14 +37,14 @@ namespace GameServer
 
         public static void Pong(int _fromClient, Packet _packet)
         {
-            _packetData = _packet.ReadString();
-            char[] seperator = {':'};
-            String[] packetData = _packetData.Split(seperator);
             try
             {
+                _packetData = _packet.ReadString();
+                char[] seperator = {':'};
+                String[] packetData = _packetData.Split(seperator);
+
                 if (packetData[0] == "pong")
                 {
-                    Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Recieving pingid:" + packetData[1]);
                     Server.clients[_fromClient].lastPingIDRecieved = Int32.Parse(packetData[1]);
 
                     if (Server.clients[_fromClient].lastPingIDRecieved <= (ServerSend.pingID - 3)
