@@ -202,7 +202,7 @@ namespace GameServer {
             // }
         }
 
-        private void Disconnect() {
+        public void Disconnect() {
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {tcp.socket.Client.RemoteEndPoint} has disconnected.");
             Server._clientsConnected -= 1;
             tcp.Disconnect();

@@ -55,7 +55,7 @@ namespace GameServer
                         if (Server.clients[_fromClient].isConnected)
                         {
                             Server.clients[_fromClient].isConnected = false;
-                            Server.clients[_fromClient].tcp.Disconnect();
+                            Server.clients[_fromClient].Disconnect();
                             return;
                         }
                     }

@@ -47,11 +47,26 @@ namespace GameServer
 
             Thread pingThread = new Thread(Ping);
             pingThread.Start();
+            
+            Thread checkConnectionThread = new Thread(CheckConnections);
+            checkConnectionThread.Start();
         }
 
-        public static void Ping()
-        {
 
+        public static void CheckConnections()
+        {
+            Thread.Sleep(15000);
+            clients = null;
+            for (int i = 0; i < clients.Count; i++) {
+                if (clients[i].lastPingIDRecieved <= (ServerSend.pingID - 3))
+                {
+                    clients[i].Disconnect();
+                }
+            }
+            CheckConnections();
+        }
+
+        public static void Ping() {
             currentTime = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
             if (currentTime - startTime != 0)
             {
