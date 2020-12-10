@@ -62,7 +62,7 @@ namespace GameServer
                 }
 
                 Server.clients[_fromClient].isConnected = true;
-                Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} Pong!");
+                // Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} Pong!");
             }
             catch (Exception e)
             {

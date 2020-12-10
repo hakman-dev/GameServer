@@ -80,7 +80,14 @@ namespace GameServer {
                     stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
                 } catch (Exception _ex) {
                     Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Error receiving TCP data: {_ex}");
-                    Server.clients[id].Disconnect();
+                    try
+                    {
+                        Server.clients[id].Disconnect();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Old packet received");
+                    }
                 }
             }
 
