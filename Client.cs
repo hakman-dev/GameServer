@@ -17,7 +17,8 @@ namespace GameServer {
         public TCP tcp;
         public UDP udp;
         public string userid;
-        public int lastPingIDRecieved = 0;
+        public bool hasHadAConnection = false;
+        public int lastPingIDRecieved;
         public bool isConnected;
 
         public Client(int _clientId) {
@@ -39,7 +40,8 @@ namespace GameServer {
                 id = _id;
             }
 
-            public void Connect(TcpClient _socket) {
+            public void Connect(TcpClient _socket)
+            {
                 socket = _socket;
                 socket.ReceiveBufferSize = dataBufferSize;
                 socket.SendBufferSize = dataBufferSize;

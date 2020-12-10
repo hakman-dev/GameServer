@@ -15,7 +15,9 @@ namespace GameServer
         public static int _clientsConnected { get; set; }
         public static int Port { get; private set; }
         public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
+
         public delegate void PacketHandler(int _fromClient, Packet _packet);
+
         public static Dictionary<int, PacketHandler> packetHandlers;
 
         private static TcpListener tcpListener;
@@ -24,9 +26,10 @@ namespace GameServer
         private static Int32 currentTime;
         private static bool shouldPing = true;
         private static bool shouldStopPinging = false;
+
         public static void Start(int _maxPlayers, int _port)
         {
-            startTime = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
+            startTime = (Int32) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
 
             MaxPlayers = _maxPlayers;
             _clientsConnected = 0;
@@ -43,11 +46,11 @@ namespace GameServer
             udpListener.BeginReceive(UDPReceiveCallback, null);
 
             Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Server started on port {Port}.");
-            
+
 
             Thread pingThread = new Thread(Ping);
             pingThread.Start();
-            
+
             Thread checkConnectionThread = new Thread(CheckConnections);
             checkConnectionThread.Start();
         }
@@ -57,24 +60,27 @@ namespace GameServer
         {
             Thread.Sleep(15000);
             clients = null;
-            for (int i = 0; i < clients.Count; i++) {
-                try
+            for (int i = 0; i < clients.Count; i++)
+            {
+                if (clients[i].lastPingIDRecieved <= (ServerSend.pingID - 3) && clients[i].hasHadAConnection)
                 {
-                    if (clients[i].lastPingIDRecieved <= (ServerSend.pingID - 3))
+                    try
                     {
                         clients[i].Disconnect();
                     }
-                }
-                catch (Exception e)
-                {
-                    // do nothing with it, YOLO
+                    catch (Exception e)
+                    {
+                        // do nothing with it, YOLO
+                    }
                 }
             }
+
             CheckConnections();
         }
 
-        public static void Ping() {
-            currentTime = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
+        public static void Ping()
+        {
+            currentTime = (Int32) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0))).TotalSeconds;
             if (currentTime - startTime != 0)
             {
                 if (shouldPing)
@@ -92,12 +98,12 @@ namespace GameServer
                     }
                 }
             }
-            
+
             if ((currentTime - startTime) % 5 == 0 && shouldPing)
             {
                 ServerSend.Ping();
             }
-            
+
             Thread.Sleep(990);
             Ping();
         }
@@ -106,7 +112,8 @@ namespace GameServer
         {
             TcpClient _client = tcpListener.EndAcceptTcpClient(_result);
             tcpListener.BeginAcceptTcpClient(TCPConnectCallback, null);
-            Console.WriteLine($"[{DateTime.Now.TimeOfDay}] Incoming connection from {_client.Client.RemoteEndPoint}...");
+            Console.WriteLine(
+                $"[{DateTime.Now.TimeOfDay}] Incoming connection from {_client.Client.RemoteEndPoint}...");
             _clientsConnected += 1;
 
             for (int i = 1; i <= MaxPlayers; i++)
@@ -117,8 +124,10 @@ namespace GameServer
                     return;
                 }
             }
+
             //TODO:: Disable new clients when game started
-            Console.WriteLine($"[{DateTime.Now.TimeOfDay}] {_client.Client.RemoteEndPoint} failed to connect: Server full!");
+            Console.WriteLine(
+                $"[{DateTime.Now.TimeOfDay}] {_client.Client.RemoteEndPoint} failed to connect: Server full!");
         }
 
         private static void UDPReceiveCallback(IAsyncResult _result)
@@ -185,8 +194,8 @@ namespace GameServer
 
             packetHandlers = new Dictionary<int, PacketHandler>()
             {
-                { (int)ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived },
-                { (int)ClientPackets.pong, ServerHandle.Pong },
+                {(int) ClientPackets.welcomeReceived, ServerHandle.WelcomeReceived},
+                {(int) ClientPackets.pong, ServerHandle.Pong},
                 // { (int)ClientPackets.playerMovement, ServerHandle.PlayerMovement },
             };
             Console.WriteLine("Initialized packets.");
