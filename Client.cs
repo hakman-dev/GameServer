@@ -210,6 +210,7 @@ namespace GameServer {
             Server._clientsConnected -= 1;
             tcp.Disconnect();
             udp.Disconnect();
+            isConnected = false;
             
             ServerSend.PlayerCountUpdate(Server._clientsConnected.ToString());
 
