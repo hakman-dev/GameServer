@@ -48,11 +48,11 @@ namespace GameServer
                     Server.clients[_fromClient].lastPingIDRecieved = Int32.Parse(packetData[1]);
                     Server.clients[_fromClient].hasHadAConnection = true;
                     Console.WriteLine("Pong received" + packetData[1]);
-                    if (Server.clients[_fromClient].lastPingIDRecieved <= (ServerSend.pingID - 3)
+                    if (Server.clients[_fromClient].lastPingIDRecieved <= (ServerSend.pingID - 12) // 1 every 5 seconds = 1 minute behind
                     ) // missed 3 pings.. disconnect!
                     {
                         Console.WriteLine(
-                            $"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} was removed from game.");
+                            $"[{DateTime.Now.TimeOfDay}] {Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} was removed from game due to inactivity.");
                         if (Server.clients[_fromClient].isConnected)
                         {
                             Server.clients[_fromClient].isConnected = false;
