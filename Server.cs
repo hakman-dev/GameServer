@@ -50,7 +50,7 @@ namespace GameServer
 
             Thread pingThread = new Thread(Ping);
             pingThread.Start();
-
+            Thread.Sleep(30000);
             Thread checkConnectionThread = new Thread(CheckConnections);
             checkConnectionThread.Start();
         }
@@ -58,7 +58,7 @@ namespace GameServer
 
         public static void CheckConnections()
         {
-            Thread.Sleep(15000);
+            Thread.Sleep(60000);
             for (int i = 1; i <= clients.Count; i++)
             {
                 try
