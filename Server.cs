@@ -102,6 +102,8 @@ namespace GameServer
             if ((currentTime - startTime) % 5 == 0 && shouldPing)
             {
                 ServerSend.Ping();
+            } else if (!shouldPing) {
+                Console.Write("Ad break");
             }
 
             Thread.Sleep(990);
