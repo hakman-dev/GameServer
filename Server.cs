@@ -63,7 +63,7 @@ namespace GameServer
             {
                 try
                 {
-                    if (clients[i].lastPingIDRecieved != 0 && clients[i].lastPingIDRecieved <= (ServerSend.pingID - 12) && clients[i].hasHadAConnection)
+                    if (clients[i].lastPingIDRecieved != 0 && clients[i].lastPingIDRecieved <= (ServerSend.pingID - 12) && clients[i].hasHadAConnection && clients[i].isConnected)
                     {
                         Console.Write("Disconnecting client here");
                         clients[i].Disconnect();
