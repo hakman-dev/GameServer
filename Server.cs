@@ -85,14 +85,14 @@ namespace GameServer
             {
                 if (shouldPing)
                 {
-                    if (((currentTime - startTime)) % 300 == 0)
+                    if (((currentTime - startTime)) % 150 == 0)
                     {
                         shouldPing = false;
                     }
                 }
                 else
                 {
-                    if (((currentTime - startTime) - 60) % 300 == 0)
+                    if (((currentTime - startTime) - 60) % 150 == 0)
                     {
                         shouldPing = true;
                     }
